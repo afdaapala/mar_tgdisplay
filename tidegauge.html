@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link src="tidegauge.css" /> -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/js/all.min.js" integrity="sha512-naukR7I+Nk6gp7p5TMA4ycgfxaZBJ7MO5iC3Fp6ySQyKFHOGfpkSZkYVWV5R7u7cfAicxanwYQ5D1e17EfJcMA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link href="https://cdn.jsdelivr.net/npm/gridjs/dist/theme/mermaid.min.css" rel="stylesheet" />
+    <title>Tidegauge Rekayasa Stamar Kendari</title>
+</head>
+<body class="font">
+        <header class=" border-b border-blue-light">
+        <div class="container mx-auto">
+            <div class="flex content-center py-4">
+            <a class="block w-16 h-16 " href="https://cdn.bmkg.go.id/Web/Logo-BMKG-new.png">
+                <img src="https://cdn.bmkg.go.id/Web/Logo-BMKG-new.png" alt="Logo BMKG">
+            </a>
+            <div class="flex flex-col mx-4 text-center w-full">
+                <p class="text-sm font-bold sm:text-lg md:text-2xl">STASIUN METEOROLOGI MARITIM KENDARI</p>
+                <p class="text-xs sm:text-base">Tidegauge Rekayasa Stamar Kendari - Realtime View</p>
+            </div>
+            </div>
+        </div>
+        </header>
+        <section>
+        <div class="container mx-auto py-2">
+            <div class="flex flex-inline">
+            <p id="tanggal" data-date="1667841790" class="hidden sm:block sm:w-full sm:text-left sm:text-sm">Senin, 20 Febuari 2018</p>
+            <h5 class="w-full text-center text-lg sm:text-bold sm:text-xl">
+                Tidegauge | Lokasi: Baubau</h5>
+            <p id="jam" class="hidden sm:block sm:w-full sm:text-right sm:text-sm">00:00:00 (UTC)</p>
+            </div>
+        </div>
+        </section>
+        <section class="mt-0">
+            <div class="container mx-auto py-2">
+                <div class="flex flex-col md:flex-col">
+                    <div class="flex flex-inline flex-row">
+                        <div class="w-32 h-32"></div>
+                        <div class="grow h-50 border border-blue rounded my-2">
+                            <div class="border-b border-blue-light py-2 px-2 text-center">
+                            <h4 class="text-grey-dark">Water Level : { 3 } m</h4>
+                            </div>
+                            <div class="w-100 center">
+                                <canvas id="myChart"></canvas>
+                            </div>
+                            <div id="val_wlevel" class="border-b border-blue-light py-2 px-2 text-right">Current Water Level : 5 m</div>
+                        </div>
+                        <div class="w-32 h-32"></div>
+                    </div>
+                    <div class="grid lg:grid-cols-3 gap-4">
+                        <div class="flex-auto border border-blue rounded m-3">
+                            <div class="border-b border-blue-light py-2 px-2 text-center">
+                            <h4 class="text-grey-dark">Air Temperature : { 30 } Celsius </h4>
+                            </div>
+                            <div class="">
+                                <canvas id="myChartsuhu" width="300px" height="250px"></canvas>
+                            </div>
+                            <!-- <div id="val_airtemp" class="border-b border-blue-light py-2 px-2 text-right">Current Temperature : 5 celsius</div> -->
+                        </div>
+                        <div class="flex-auto border border-blue-light bg-blue-lightest rounded m-3">
+                            <div class="border-b border-blue-light py-2 px-2 text-center">
+                            <h4 class="text-grey-dark">Humidity : { 88 } %</h4>
+                            </div>
+                            <div class="">
+                                <canvas id="myChartrh" width="300px" height="250px"></canvas>
+                            </div>
+                            <!-- <div id="val_rhum" class="border-b border-blue-light py-2 px-2 text-right">Current Humidity : 88 %</div> -->
+                        </div>
+                        <div class="flex-auto border border-blue-light bg-blue-lightest rounded m-3">
+                            <div class="border-b border-blue-light py-2 px-2 text-center">
+                            <h4 class="text-grey-dark">Water Temp : { 26 } Celcius</h4>
+                            </div>
+                            <div class="">
+                                <canvas id="myChartsst" width="300px" height="250px"></canvas>
+                            </div>
+                            <!-- <div id="val_wtemp" class="border-b border-blue-light py-2 px-2 text-right">Current Water Temp : 5 m</div> -->
+                        </div> 
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section>
+            <div class="container mx-auto py-2">
+                <div class="flex flex-row m-4 border">
+                    <div class="flex flex-col m-4">
+                        <input type="text" class="py-2 px-4 rounded border">
+                        <button type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2">Calibrate</button>
+                        <label class="mt-2" for="dari">Dari:</label>
+                        <input class="border" type="datetime-local" id="dari" name="dari" required>
+                        <label class="mt-2" for="sampai">Sampai:</label>
+                        <input class="border" type="datetime-local" id="sampai" name="sampai" required>
+                    </div>
+                    <div class="grow">
+                        <!-- <div id="mygrid"></div> -->
+                        <div class="card p-2">
+                            <table id="datatables" class="table table-striped" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Time</th>
+                                        <th>Level</th>
+                                        <th>Temperature</th>
+                                        <th>RH</th>
+                                        <th>WaterTemp</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gridjs/dist/gridjs.umd.js"></script>
+    <script>
+        function getdate(){
+            var today = new Date();
+            var dd = String(today.getDate()).padStart(2, '0');
+            var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+            var yyyy = today.getFullYear();
+            today = mm + '/' + dd + '/' + yyyy;
+            // document.write(today);
+            const element = document.getElementById("tanggal");
+            element.innerHTML = today;
+        }
+
+        var timeDisplay = document.getElementById("jam");
+        function refreshTime() {
+            var dateString = new Date().toLocaleString("en-US", {timeZone: "UTC"});
+            var formattedString = dateString.replace(", ", " - ");
+            timeDisplay.innerHTML = formattedString;
+        }
+
+        setInterval(refreshTime, 1000);
+
+        getdate()
+
+        // chart placeholder
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const ctx1 = document.getElementById('myChartsuhu').getContext('2d');
+        const ctx2 = document.getElementById('myChartrh').getContext('2d');
+        const ctx3 = document.getElementById('myChartsst').getContext('2d');
+        const tabel = document.getElementById('mygrid');
+
+        const myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                datasets: [{
+                    label: '# of Votes',
+                    data: [12, 19, 3, 5, 2, 3],
+                    backgroundColor: [
+                        'rgba(50, 99, 255, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(00, 99, 255, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+        const myChartsuhu = new Chart(ctx1, {
+            type: 'line',
+            data: {
+                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                datasets: [{
+                    label: '# of Votes',
+                    data: [12, 19, 3, 5, 2, 3],
+                    backgroundColor: [
+                        'rgba(50, 99, 255, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(00, 99, 255, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+        const myChartrh = new Chart(ctx2, {
+            type: 'line',
+            data: {
+                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                datasets: [{
+                    label: '# of Votes',
+                    data: [12, 19, 3, 5, 2, 3],
+                    backgroundColor: [
+                        'rgba(50, 99, 255, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(00, 99, 255, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+        const myChartsst = new Chart(ctx3, {
+            type: 'line',
+            data: {
+                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                datasets: [{
+                    label: '# of Votes',
+                    data: [12, 19, 3, 5, 2, 3],
+                    backgroundColor: [
+                        'rgba(50, 99, 255, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(00, 99, 255, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        const mygrid = new Grid(tabel, {
+            columns: ['Name', 'Email', 'Phone Number'],
+            data: [
+                ['John', 'john@example.com', '(353) 01 222 3333'],
+                ['Mark', 'mark@gmail.com',   '(01) 22 888 4444']
+            ]
+            });
+        
+        
+    </script>
+</body>
+</html>
